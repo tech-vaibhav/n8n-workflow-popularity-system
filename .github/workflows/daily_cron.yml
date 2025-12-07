@@ -1,0 +1,27 @@
+name: Daily Workflow Popularity Update
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # run once every 24 hours at midnight UTC
+  workflow_dispatch:       # allow manual trigger
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install requests
+
+    - name: Run cron update script
+      run: |
+        python cron/update_data.py
